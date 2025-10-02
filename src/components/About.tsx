@@ -1,6 +1,62 @@
 import { Code2, Database, Smartphone, Palette } from "lucide-react";
+import { useRef, useEffect } from "react";
 
 const About = () => {
+  const imgWrapRef = useRef<HTMLDivElement | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const wrap = imgWrapRef.current;
+    const img = imgRef.current;
+    if (!wrap || !img) return;
+
+    let width = wrap.clientWidth;
+    let height = wrap.clientHeight;
+    let rect = wrap.getBoundingClientRect();
+
+    const onResize = () => {
+      rect = wrap.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+    };
+
+    const handleMove = (e: MouseEvent) => {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const px = (x / width - 0.5) * 2; // -1 .. 1
+      const py = (y / height - 0.5) * 2; // -1 .. 1
+      const rotateX = -py * 10; // tilt range
+      const rotateY = px * 10;
+      const scale = 1.06;
+
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        wrap.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${scale})`;
+        img.style.transform = `translateZ(30px)`;
+      });
+    };
+
+    const handleLeave = () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        wrap.style.transform = `perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)`;
+        img.style.transform = `translateZ(0)`;
+      });
+    };
+
+    window.addEventListener("resize", onResize);
+    wrap.addEventListener("mousemove", handleMove);
+    wrap.addEventListener("mouseleave", handleLeave);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      wrap.removeEventListener("mousemove", handleMove);
+      wrap.removeEventListener("mouseleave", handleLeave);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   const skills = [
     { name: "C++", level: 90, icon: Code2 },
     { name: "React & React Native", level: 95, icon: Smartphone },
@@ -12,7 +68,7 @@ const About = () => {
   return (
     <section id="about" className="py-20 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-glow opacity-50"></div>
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-fade-in">
@@ -27,11 +83,15 @@ const About = () => {
             <div className="relative group animate-fade-in">
               <div className="absolute inset-0 bg-gradient-primary rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-smooth"></div>
               <div className="relative bg-card rounded-2xl p-8 border border-border overflow-hidden">
-                <div className="w-full aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center">
-                  <img 
-                    src="/profile.jpg" 
-                    alt="Profile" 
-                    className="object-cover w-full h-full rounded-xl border border-border profile-bounce-img" 
+                <div
+                  ref={imgWrapRef}
+                  className="w-full aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center profile-orbit-bg profile-neon-outline profile-3d"
+                >
+                  <img
+                    ref={imgRef}
+                    src="/profile.jpg"
+                    alt="Profile"
+                    className="object-cover w-full h-full rounded-xl border border-border profile-bounce-img profile-animate profile-vibrant"
                   />
                 </div>
               </div>
@@ -40,10 +100,17 @@ const About = () => {
             {/* Bio */}
             <div className="space-y-6 animate-slide-in">
               <p className="text-lg text-muted-foreground leading-relaxed">
-                I'm <span className="text-primary font-semibold">Godswill Robwet</span>, a passionate software developer and tech educator based in Kenya. With expertise in full-stack development, I specialize in creating innovative solutions that transform businesses and empower communities.
+                Hi, I'm{" "}
+                <span className="text-primary font-semibold">Godswill Robwet</span>
+                — a passionate software developer and tech educator based in Nakuru,
+                Kenya. I build full-stack applications and teach developers practical
+                skills to ship production-ready software that makes an impact.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                From building comprehensive inventory systems to developing mobile applications, I bring ideas to life with clean code and modern technologies. I also enjoy teaching programming and mathematics, helping others unlock their potential in the tech world.
+                From building comprehensive inventory systems to developing mobile
+                applications, I bring ideas to life with clean code and modern
+                technologies. I also enjoy teaching programming and mathematics,
+                helping others unlock their potential in the tech world.
               </p>
 
               {/* Skills */}
@@ -60,14 +127,17 @@ const About = () => {
                           <Icon className="w-5 h-5 text-primary" />
                           <span className="font-medium">{skill.name}</span>
                         </div>
-                        <span className="text-primary font-semibold">{skill.level}%</span>
+                        <span className="text-primary font-semibold">
+                          {skill.level}%
+                        </span>
                       </div>
                       <div className="h-2 bg-muted rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-primary transition-all duration-1000 ease-out"
+                          className={`h-full bg-gradient-primary transition-all duration-1000 ease-out skill-fill`}
                           style={{
+                            transform: `scaleX(1)`,
                             width: `${skill.level}%`,
-                            animation: `slide-in 1s ease-out ${index * 0.1}s both`,
+                            animationDelay: `${index * 0.1}s`,
                           }}
                         ></div>
                       </div>

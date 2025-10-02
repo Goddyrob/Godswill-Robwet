@@ -26,16 +26,23 @@ const Hero = () => {
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
           <div className="space-y-4">
               <p className="text-accent text-lg font-medium tracking-wider uppercase">
-                Welcome to My Portfolio
+                Welcome to my portfolio
               </p>
-              <h1 className="text-5xl md:text-7xl font-orbitron font-extrabold mb-6 text-primary drop-shadow-lg">
-                GODSWILL<br />ROBWET
-              </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground mb-4 font-medium">
-                Based in Nakuru, Kenya
-              </p>
+
+              <div className="mb-2">
+                <h1 className="text-3xl md:text-4xl font-medium text-muted-foreground mb-1">
+                  Hi, I'm
+                </h1>
+                <h2 className="text-5xl md:text-7xl font-orbitron font-extrabold mb-4 text-primary drop-shadow-lg">
+                  Godswill Robwet
+                </h2>
+                <p className="text-xl md:text-2xl text-muted-foreground font-medium">
+                  I build beautiful, reliable web & mobile experiences that solve real problems.
+                </p>
+              </div>
+
               <p className="text-lg md:text-xl text-foreground font-semibold mb-8">
-                Frontend and Backend Software Developer
+                Based in Nakuru, Kenya — Frontend & Backend Software Developer
               </p>
           </div>
 
