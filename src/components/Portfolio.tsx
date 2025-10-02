@@ -52,8 +52,8 @@ const Portfolio = () => {
     <section id="portfolio" className="py-20 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-glow opacity-30"></div>
       
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-6xl mx-auto">
+  <div className="container mx-auto px-0 sm:px-4 relative z-10">
+  <div className="max-w-full sm:max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-orbitron font-bold mb-4">
               My <span className="text-primary">Portfolio</span>

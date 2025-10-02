@@ -72,6 +72,20 @@ All colors MUST be HSL.
     font-family: 'Poppins', sans-serif;
   }
 
+  /* Remove default body margin and account for safe-area insets on mobile */
+  html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-width: 100%;
+  }
+
+  /* Use safe-area-inset paddings for notched devices while keeping edge-to-edge layout */
+  :root {
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Orbitron', sans-serif;
     font-weight: 700;

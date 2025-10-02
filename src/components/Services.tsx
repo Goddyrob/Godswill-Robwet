@@ -49,7 +49,7 @@ const Services = () => {
   return (
     <section id="services" className="py-20 relative">
       <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
+  <div className="max-w-full sm:max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-orbitron font-bold mb-4">
               My <span className="text-primary">Services</span>

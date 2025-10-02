@@ -38,7 +38,7 @@ const Navbar = () => {
         isScrolled ? "bg-card/95 backdrop-blur-lg border-b border-border" : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4 py-4">
+  <div className="container mx-auto px-0 sm:px-4 py-4">
         <div className="flex items-center justify-between">
           <button
             onClick={() => scrollToSection("hero")}
