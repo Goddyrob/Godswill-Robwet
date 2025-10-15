@@ -7,7 +7,8 @@ export const LazyResumeViewer: React.FC<{
   file?: string | null;
   initialPage?: number;
   initialScale?: number;
-}> = ({ file, initialPage = 1, initialScale = 1 }) => {
+  onReady?: () => void;
+}> = ({ file, initialPage = 1, initialScale = 1, onReady }) => {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(initialPage);
   const [scale, setScale] = useState(initialScale);
@@ -21,6 +22,7 @@ export const LazyResumeViewer: React.FC<{
   function onDocumentLoadSuccess({ numPages: nextNumPages }: { numPages: number }) {
     setNumPages(nextNumPages);
     setError(null);
+    if (onReady) onReady();
   }
 
   function onDocumentLoadError(err: any) {

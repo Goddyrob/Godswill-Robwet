@@ -27,6 +27,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [fileLoading, setFileLoading] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [viewerReady, setViewerReady] = useState(false);
 
   // Fetch blob URL when opening
   async function fetchFile() {
@@ -49,6 +50,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // when viewer opens, fetch file; when closed, revoke URL
   React.useEffect(() => {
+    setViewerReady(false);
     if (isOpen) fetchFile();
     return () => {
       if (fileUrl) {
@@ -160,9 +162,11 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               </div>
             </div>
           ) : (
-            <Suspense fallback={<div className="w-full h-[calc(100%-4.25rem)] flex items-center justify-center">Loading viewer...</div>}>
-              <LazyResumeViewer file={fileUrl} initialPage={pageNumber} initialScale={scale} />
-            </Suspense>
+            <div className={`w-full h-[calc(100%-4.25rem)] transition-opacity duration-500 ${viewerReady ? 'opacity-100' : 'opacity-0'}`}>
+              <Suspense fallback={<div className="w-full h-full flex items-center justify-center">Loading viewer...</div>}>
+                <LazyResumeViewer file={fileUrl} initialPage={pageNumber} initialScale={scale} onReady={() => setViewerReady(true)} />
+              </Suspense>
+            </div>
           )}
         </DialogContent>
       </Dialog>
