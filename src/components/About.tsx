@@ -1,6 +1,15 @@
 import { Code2, Database, Smartphone, Palette } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 
 const About = () => {
   const imgWrapRef = useRef<HTMLDivElement | null>(null);
@@ -66,6 +75,8 @@ const About = () => {
     { name: "Graphic Design", level: 80, icon: Palette },
   ];
 
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+
   return (
     <section id="about" className="py-20 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-glow opacity-50"></div>
@@ -128,14 +139,28 @@ const About = () => {
                   View my work
                 </a>
 
-                <Button
-                  asChild
-                  className="mt-3 sm:mt-0 transform transition-all duration-300 hover:-translate-y-1"
-                >
-                  <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-                    View my Resume
-                  </a>
-                </Button>
+                {/* Open resume in an in-page dialog */}
+                <Dialog open={isResumeOpen} onOpenChange={setIsResumeOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="mt-3 sm:mt-0 transform transition-all duration-300 hover:-translate-y-1">
+                      View my Resume
+                    </Button>
+                  </DialogTrigger>
+
+                  <DialogContent className="max-w-4xl w-[95vw] h-[85vh] p-0 overflow-hidden">
+                    <DialogHeader>
+                      <DialogTitle>Your Resume</DialogTitle>
+                      <DialogDescription>Preview of the resume — close when finished.</DialogDescription>
+                    </DialogHeader>
+                    <div className="w-full h-[calc(100%-4rem)]">
+                      <iframe
+                        src="/resume.pdf"
+                        title="Resume"
+                        className="w-full h-full"
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
 
               {/* Skills */}
