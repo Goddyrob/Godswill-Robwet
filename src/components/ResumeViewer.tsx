@@ -25,18 +25,25 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
   const close = () => setIsOpen(false);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [fileError, setFileError] = useState<string | null>(null);
 
   // Fetch blob URL when opening
   async function fetchFile() {
+    setFileLoading(true);
+    setFileError(null);
     try {
       const res = await fetch("/resume.pdf");
-      if (!res.ok) throw new Error("Not found");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       setFileUrl(url);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to fetch resume.pdf", e);
       setFileUrl(null);
+      setFileError("Failed to fetch resume.pdf");
+    } finally {
+      setFileLoading(false);
     }
   }
 
@@ -142,9 +149,21 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             </div>
           </div>
 
-          <Suspense fallback={<div className="w-full h-[calc(100%-4.25rem)] flex items-center justify-center">Loading viewer...</div>}>
-            <LazyResumeViewer file={fileUrl} initialPage={pageNumber} initialScale={scale} />
-          </Suspense>
+          {fileLoading ? (
+            <div className="w-full h-[calc(100%-4.25rem)] flex items-center justify-center">Loading file...</div>
+          ) : fileError ? (
+            <div className="w-full h-[calc(100%-4.25rem)] flex flex-col items-center justify-center gap-4">
+              <div className="text-center">{fileError}</div>
+              <div className="flex gap-2">
+                <button className="px-4 py-2 rounded bg-background" onClick={() => window.open('/resume.pdf', '_blank')}>Open raw PDF</button>
+                <button className="px-4 py-2 rounded bg-background" onClick={() => { fetchFile(); }}>Retry</button>
+              </div>
+            </div>
+          ) : (
+            <Suspense fallback={<div className="w-full h-[calc(100%-4.25rem)] flex items-center justify-center">Loading viewer...</div>}>
+              <LazyResumeViewer file={fileUrl} initialPage={pageNumber} initialScale={scale} />
+            </Suspense>
+          )}
         </DialogContent>
       </Dialog>
     </ResumeContext.Provider>
