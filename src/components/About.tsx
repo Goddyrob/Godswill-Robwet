@@ -113,6 +113,30 @@ const About = () => {
                 helping others unlock their potential in the tech world.
               </p>
 
+              {/* CTA Row: View my work / View my Resume */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 mt-6">
+                <a
+                  href="#portfolio"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.getElementById("portfolio");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="inline-block px-5 py-3 rounded-md bg-transparent border border-border text-foreground hover:bg-muted transition-smooth font-medium text-center"
+                >
+                  View my work
+                </a>
+
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-3 sm:mt-0 px-6 py-3 rounded-md bg-primary text-primary-foreground shadow-lg transform transition-all duration-400 hover:-translate-y-1 hover:shadow-2xl animate-fade-in-up"
+                >
+                  View my Resume
+                </a>
+              </div>
+
               {/* Skills */}
               <div className="space-y-4 pt-6">
                 <h3 className="text-2xl font-orbitron font-bold text-foreground mb-6">
