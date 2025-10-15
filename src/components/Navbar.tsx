@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useResume } from "@/components/resume-context";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,6 +32,9 @@ const Navbar = () => {
     { name: "Testimonials", id: "testimonials" },
     { name: "Contact", id: "contact" },
   ];
+
+  // Hook must be called at top-level
+  const { open: openResume } = useResume();
 
   return (
     <nav
@@ -65,15 +69,9 @@ const Navbar = () => {
               Hire Me
             </Button>
             {/* Resume CTA */}
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              download
-              className="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium bg-foreground text-foreground-foreground hover:opacity-95 transition-smooth ml-2"
-            >
+            <Button onClick={() => openResume()} className="ml-2">
               Resume
-            </a>
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -103,15 +101,7 @@ const Navbar = () => {
             >
               Hire Me
             </Button>
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              download
-              className="block w-full text-center bg-foreground text-foreground-foreground rounded-md px-4 py-2 text-sm font-medium hover:opacity-95 transition-smooth"
-            >
-              Resume
-            </a>
+            <Button className="w-full" onClick={() => openResume()}>Resume</Button>
           </div>
         )}
       </div>

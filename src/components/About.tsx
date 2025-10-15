@@ -1,15 +1,7 @@
 import { Code2, Database, Smartphone, Palette } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { useState } from "react";
+import { useResume } from "@/components/resume-context";
 
 const About = () => {
   const imgWrapRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +67,7 @@ const About = () => {
     { name: "Graphic Design", level: 80, icon: Palette },
   ];
 
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const { open: openResume } = useResume();
 
   return (
     <section id="about" className="py-20 relative overflow-hidden">
@@ -140,27 +132,14 @@ const About = () => {
                 </a>
 
                 {/* Open resume in an in-page dialog */}
-                <Dialog open={isResumeOpen} onOpenChange={setIsResumeOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="mt-3 sm:mt-0 transform transition-all duration-300 hover:-translate-y-1">
-                      View my Resume
-                    </Button>
-                  </DialogTrigger>
-
-                  <DialogContent className="max-w-4xl w-[95vw] h-[85vh] p-0 overflow-hidden">
-                    <DialogHeader>
-                      <DialogTitle>Your Resume</DialogTitle>
-                      <DialogDescription>Preview of the resume — close when finished.</DialogDescription>
-                    </DialogHeader>
-                    <div className="w-full h-[calc(100%-4rem)]">
-                      <iframe
-                        src="/resume.pdf"
-                        title="Resume"
-                        className="w-full h-full"
-                      />
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <Button
+                  onClick={() => {
+                    openResume();
+                  }}
+                  className="mt-3 sm:mt-0 transform transition-all duration-300 hover:-translate-y-1"
+                >
+                  View my Resume
+                </Button>
               </div>
 
               {/* Skills */}
