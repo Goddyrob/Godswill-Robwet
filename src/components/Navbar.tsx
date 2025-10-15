@@ -64,6 +64,16 @@ const Navbar = () => {
             >
               Hire Me
             </Button>
+            {/* Resume CTA */}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              className="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium bg-foreground text-foreground-foreground hover:opacity-95 transition-smooth ml-2"
+            >
+              Resume
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -93,6 +103,15 @@ const Navbar = () => {
             >
               Hire Me
             </Button>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              className="block w-full text-center bg-foreground text-foreground-foreground rounded-md px-4 py-2 text-sm font-medium hover:opacity-95 transition-smooth"
+            >
+              Resume
+            </a>
           </div>
         )}
       </div>
