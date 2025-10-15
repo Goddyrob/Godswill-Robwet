@@ -60,6 +60,59 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               <button className="px-2 py-1 rounded bg-background" onClick={() => setScale((s) => Math.max(0.5, s - 0.1))}>-</button>
               <div className="text-sm">{Math.round(scale * 100)}%</div>
               <button className="px-2 py-1 rounded bg-background" onClick={() => setScale((s) => Math.min(2, s + 0.1))}>+</button>
+
+              {/* Toolbar actions: Open, Download, Print */}
+              <button
+                title="Open in new tab"
+                className="px-3 py-1 rounded bg-background"
+                onClick={() => window.open('/resume.pdf', '_blank')}
+              >
+                Open
+              </button>
+
+              <button
+                title="Download"
+                className="px-3 py-1 rounded bg-background"
+                onClick={async () => {
+                  try {
+                    const res = await fetch('/resume.pdf');
+                    const blob = await res.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'resume.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                  } catch (err) {
+                    console.error('Download failed', err);
+                  }
+                }}
+              >
+                Download
+              </button>
+
+              <button
+                title="Print"
+                className="px-3 py-1 rounded bg-background"
+                onClick={() => {
+                  const w = window.open('/resume.pdf');
+                  if (w) {
+                    w.focus();
+                    // try to print after load
+                    setTimeout(() => {
+                      try {
+                        w.print();
+                      } catch (e) {
+                        console.warn('Print not available');
+                      }
+                    }, 500);
+                  }
+                }}
+              >
+                Print
+              </button>
             </div>
           </div>
 
