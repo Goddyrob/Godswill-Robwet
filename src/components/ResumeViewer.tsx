@@ -162,10 +162,17 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               </div>
             </div>
           ) : (
-            <div className={`w-full h-[calc(100%-4.25rem)] transition-opacity duration-500 ${viewerReady ? 'opacity-100' : 'opacity-0'}`}>
-              <Suspense fallback={<div className="w-full h-full flex items-center justify-center">Loading viewer...</div>}>
-                <LazyResumeViewer file={fileUrl} initialPage={pageNumber} initialScale={scale} onReady={() => setViewerReady(true)} />
-              </Suspense>
+            <div className="w-full h-[calc(100%-4.25rem)] flex items-center justify-center">
+              {/* Skeleton placeholder to avoid layout shifts */}
+              {!viewerReady && (
+                <div className="w-[800px] h-[1100px] bg-[#0f1724] rounded shadow-inner animate-pulse"></div>
+              )}
+
+              <div className={`absolute transition-opacity duration-500 ${viewerReady ? 'opacity-100' : 'opacity-0'}`}>
+                <Suspense fallback={<div className="w-full h-full flex items-center justify-center">Loading viewer...</div>}>
+                  <LazyResumeViewer file={fileUrl} initialPage={pageNumber} initialScale={scale} onReady={() => setViewerReady(true)} />
+                </Suspense>
+              </div>
             </div>
           )}
         </DialogContent>
