@@ -10,8 +10,8 @@ import { ResumeContext } from "@/components/resume-context";
 const LazyResumeViewer = lazy(() => import("./LazyResumeViewer"));
 import { Document, Page, pdfjs } from "react-pdf";
 
-// Point pdfjs to the worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// Use local bundled pdf.worker (copied to /public by postinstall)
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);

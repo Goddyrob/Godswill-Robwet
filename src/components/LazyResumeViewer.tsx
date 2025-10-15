@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// Use local bundled pdf.worker (copied to /public by postinstall)
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 export const LazyResumeViewer: React.FC<{
   file?: string | null;
@@ -25,9 +26,9 @@ export const LazyResumeViewer: React.FC<{
     if (onReady) onReady();
   }
 
-  function onDocumentLoadError(err: any) {
+  function onDocumentLoadError(err: unknown) {
     console.error("Failed to load PDF", err);
-    setError("Failed to load PDF file.");
+    setError(String((err instanceof Error && err.message) || err));
   }
 
   if (!file) {

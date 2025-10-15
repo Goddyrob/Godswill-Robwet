@@ -8,7 +8,9 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "copy:pdf-worker": "node ./scripts/copy-pdf-worker.js",
+    "postinstall": "npm run copy:pdf-worker"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
