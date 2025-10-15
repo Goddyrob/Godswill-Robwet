@@ -1,5 +1,6 @@
 import { Code2, Database, Smartphone, Palette } from "lucide-react";
 import { useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 
 const About = () => {
   const imgWrapRef = useRef<HTMLDivElement | null>(null);
@@ -127,14 +128,14 @@ const About = () => {
                   View my work
                 </a>
 
-                <a
-                  href="/resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-3 sm:mt-0 px-6 py-3 rounded-md bg-primary text-primary-foreground shadow-lg transform transition-all duration-400 hover:-translate-y-1 hover:shadow-2xl animate-fade-in-up"
+                <Button
+                  asChild
+                  className="mt-3 sm:mt-0 transform transition-all duration-300 hover:-translate-y-1"
                 >
-                  View my Resume
-                </a>
+                  <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                    View my Resume
+                  </a>
+                </Button>
               </div>
 
               {/* Skills */}
