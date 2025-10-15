@@ -167,12 +167,19 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               {!viewerReady && (
                 <div className="w-[800px] h-[1100px] bg-[#0f1724] rounded shadow-inner animate-pulse"></div>
               )}
-
-              <div className={`absolute transition-opacity duration-500 ${viewerReady ? 'opacity-100' : 'opacity-0'}`}>
+              <div className={`absolute inset-0 transition-opacity duration-500 ${viewerReady ? 'opacity-100' : 'opacity-0'}`}>
                 <Suspense fallback={<div className="w-full h-full flex items-center justify-center">Loading viewer...</div>}>
                   <LazyResumeViewer file={fileUrl} initialPage={pageNumber} initialScale={scale} onReady={() => setViewerReady(true)} />
                 </Suspense>
               </div>
+
+              {/* Loader overlay to hide blinking while loading */}
+              {(!viewerReady || fileLoading) && (
+                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-b from-black/40 to-black/40">
+                  <div className="w-16 h-16 border-4 border-primary rounded-full border-t-transparent animate-spin mb-4" />
+                  <div className="text-sm text-muted-foreground">Loading resume…</div>
+                </div>
+              )}
             </div>
           )}
         </DialogContent>
