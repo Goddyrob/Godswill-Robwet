@@ -24,6 +24,32 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setPageNumber(1);
   };
   const close = () => setIsOpen(false);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+
+  // Fetch blob URL when opening
+  async function fetchFile() {
+    try {
+      const res = await fetch("/resume.pdf");
+      if (!res.ok) throw new Error("Not found");
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      setFileUrl(url);
+    } catch (e) {
+      console.error("Failed to fetch resume.pdf", e);
+      setFileUrl(null);
+    }
+  }
+
+  // when viewer opens, fetch file; when closed, revoke URL
+  React.useEffect(() => {
+    if (isOpen) fetchFile();
+    return () => {
+      if (fileUrl) {
+        window.URL.revokeObjectURL(fileUrl);
+        setFileUrl(null);
+      }
+    };
+  }, [isOpen, fileUrl]);
 
   function onDocumentLoadSuccess({ numPages: nextNumPages }: { numPages: number }) {
     setNumPages(nextNumPages);
@@ -117,7 +143,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           </div>
 
           <Suspense fallback={<div className="w-full h-[calc(100%-4.25rem)] flex items-center justify-center">Loading viewer...</div>}>
-            <LazyResumeViewer initialPage={pageNumber} initialScale={scale} />
+            <LazyResumeViewer file={fileUrl} initialPage={pageNumber} initialScale={scale} />
           </Suspense>
         </DialogContent>
       </Dialog>
