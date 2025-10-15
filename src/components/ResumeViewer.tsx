@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense, lazy } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,6 +7,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ResumeContext } from "@/components/resume-context";
+const LazyResumeViewer = lazy(() => import("./LazyResumeViewer"));
 import { Document, Page, pdfjs } from "react-pdf";
 
 // Point pdfjs to the worker
@@ -62,11 +63,9 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             </div>
           </div>
 
-          <div className="w-full h-[calc(100%-4.25rem)] overflow-auto flex justify-center items-start p-4 bg-[#0b1220]">
-            <Document file="/resume.pdf" onLoadSuccess={onDocumentLoadSuccess} loading={<div className="text-center p-8">Loading...</div>}>
-              <Page pageNumber={pageNumber} scale={scale} width={800} />
-            </Document>
-          </div>
+          <Suspense fallback={<div className="w-full h-[calc(100%-4.25rem)] flex items-center justify-center">Loading viewer...</div>}>
+            <LazyResumeViewer initialPage={pageNumber} initialScale={scale} />
+          </Suspense>
         </DialogContent>
       </Dialog>
     </ResumeContext.Provider>
